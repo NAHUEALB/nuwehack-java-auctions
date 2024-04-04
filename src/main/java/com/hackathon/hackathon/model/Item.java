@@ -11,7 +11,7 @@ public class Item {
     public Item(String name, double initialPrice, Bidder currentBidder, String type) {
         this.name = name;
         this.initialPrice = initialPrice;
-        this.highestOffer = initialPrice;
+        this.highestOffer = 0.0;
         this.currentBidder = currentBidder;
         this.type = type;
     }
