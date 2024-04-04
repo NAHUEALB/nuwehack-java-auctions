@@ -3,6 +3,7 @@ package com.hackathon.hackathon.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +50,7 @@ public class HackathonService {
 
     /**
      * Recupera todos los items de un tipo especifico.
-     * @param type
+     * @param type Tipo de item a buscar
      * @return una lista con todos los items que sean del tipo especificado por parametro. En caso de que ningun item
      * sea del tipo especificado se retornara una lista vacia.
      */
@@ -63,9 +64,38 @@ public class HackathonService {
         items.add(item);
     }
 
-	public String makeOffer(String itemName, double amount, Bidder bidder) {
-    	return null;
-	}
+    /**
+     * Genera una oferta a un item del listado.
+     * @param itemName Nombre del item al que se le desea realizar la oferta.
+     * @param amount Monto que se oferta por el item de la lista.
+     * @param bidder Datos de la persona que hizo la oferta.
+     * @return Un String con el estado de la oferta(Offer accepted/Offer rejected). En caso de que el item no
+     * se encuentre en el listado se devolvera el mensaje "Item not found".
+     */
+    public String makeOffer(String itemName, double amount, Bidder bidder) {
+        Optional<Item> itemSearch = items.stream()
+                .filter(item -> itemName.equals(item.getName()))
+                .findFirst();
+
+        return itemSearch.map(item -> {
+                            if (amount > item.getHighestOffer()) {
+                                // Si el monto es mayor a la mayor oferta del item, se actualiza con el monto y su bidder.
+                                // Se devolvera el mensaje "Offer accepted"
+                                items.replaceAll(itemElement ->{
+                                    if(itemName.equals(itemElement.getName())){
+                                        itemElement.setHighestOffer(amount);
+                                        itemElement.setCurrentBidder(bidder);
+                                    }
+                                    return itemElement;
+                                });
+                                return OFFER_ACCEPTED;
+                            } else {
+                                // Si el monto es menor a la mayor oferta del item, se devolvera el mensaje "Offer rejected".
+                                return OFFER_REJECTED;
+                            }
+                            // En caso de que no exista el item buscado, se devolvera el mensaje "Item not found".
+                        }).orElse(ITEM_NOT_FOUND);
+    }
 
     /**
      * Al invocarlo se filtra el listado de items capturando aquellos que se hayan pujado y luego arma el Map clave
