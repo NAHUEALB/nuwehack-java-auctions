@@ -47,8 +47,16 @@ public class HackathonService {
         return new ArrayList<>(items);
     }
 
+    /**
+     * Recupera todos los items de un tipo especifico.
+     * @param type
+     * @return una lista con todos los items que sean del tipo especificado por parametro. En caso de que ningun item
+     * sea del tipo especificado se retornara una lista vacia.
+     */
     public List<Item> getItemsByType(String type) {
-    	return null;
+    	return items.stream()
+                    .filter(item -> type.equals(item.getType()))
+                    .toList();
     }
 
     public void addItem(Item item) {
@@ -62,8 +70,8 @@ public class HackathonService {
     /**
      * Al invocarlo se filtra el listado de items capturando aquellos que se hayan pujado y luego arma el Map clave
      * y valor del tipo String.
-     * @return Map cuya clave es el nombre del item y como valor el nombre del bidder. En caso de no tener bidder
-     * se retorna un map vacio.
+     * @return Map cuya clave es el nombre del item y como valor el nombre del bidder. En caso de que ningun item
+     * haya sido pujado se retorna un map vacio.
      */
 	public Map<String, String> getWinningBidder() {
         return items.stream()
