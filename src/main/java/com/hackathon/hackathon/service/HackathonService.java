@@ -50,7 +50,7 @@ public class HackathonService {
 
     /**
      * Recupera todos los items de un tipo especifico.
-     * @param type Tipo de item a buscar
+     * @param type Tipo de item a buscar.
      * @return una lista con todos los items que sean del tipo especificado por parametro. En caso de que ningun item
      * sea del tipo especificado se retornara una lista vacia.
      */
@@ -80,7 +80,7 @@ public class HackathonService {
         return itemSearch.map(item -> {
                             if (amount > item.getHighestOffer()) {
                                 // Si el monto es mayor a la mayor oferta del item, se actualiza con el monto y su bidder.
-                                // Se devolvera el mensaje "Offer accepted"
+                                // Se devolvera el mensaje "Offer accepted".
                                 items.replaceAll(itemElement ->{
                                     if(itemName.equals(itemElement.getName())){
                                         itemElement.setHighestOffer(amount);
